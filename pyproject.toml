@@ -1,0 +1,54 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "openvcr"
+version = "0.1.0"
+description = "The flight recorder for AI agents: record, replay, and diff LLM API traffic — deterministically, offline, in any language."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "OpenVCR contributors" }]
+requires-python = ">=3.10"
+keywords = [
+  "llm", "ai", "agents", "testing", "vcr", "record", "replay",
+  "openai", "anthropic", "pytest", "cassette", "regression",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Testing",
+  "Topic :: Software Development :: Quality Assurance",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Operating System :: OS Independent",
+]
+dependencies = ["aiohttp>=3.9,<4"]
+
+[project.optional-dependencies]
+pytest = ["pytest>=7.0"]
+dev = ["pytest>=7.0", "pytest-asyncio>=0.23"]
+
+[project.scripts]
+openvcr = "openvcr.cli:main"
+
+[project.entry-points.pytest11]
+openvcr = "openvcr.pytest_plugin"
+
+[project.urls]
+Homepage = "https://github.com/rorshopping/openvcr"
+Repository = "https://github.com/rorshopping/openvcr"
+Issues = "https://github.com/rorshopping/openvcr/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/openvcr"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]

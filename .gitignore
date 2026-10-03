@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.vercel/
+landing/.env.local
+landing/data/
+*.cassette.jsonl.bak
+.DS_Store

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenVCR — the flight recorder for AI agents</title>
+<meta name="description" content="Record every LLM call your agent makes. Replay them deterministically in tests. Diff exactly what changed when models change. Open source, MIT.">
+<meta property="og:title" content="OpenVCR — the flight recorder for AI agents">
+<meta property="og:description" content="Record, replay, and diff LLM API traffic. Deterministic agent tests, offline and free. Open source (MIT).">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B0E14'/%3E%3Ccircle cx='11' cy='19' r='4.5' fill='none' stroke='%235EEAD4' stroke-width='2'/%3E%3Ccircle cx='21' cy='19' r='4.5' fill='none' stroke='%235EEAD4' stroke-width='2'/%3E%3Crect x='7' y='8' width='18' height='4' rx='1.5' fill='%23818CF8'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top" aria-label="OpenVCR home">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#11151D" stroke="#1E2530"/><circle cx="11" cy="19" r="4.5" fill="none" stroke="#5EEAD4" stroke-width="2"/><circle cx="21" cy="19" r="4.5" fill="none" stroke="#5EEAD4" stroke-width="2"/><rect x="7" y="8" width="18" height="4" rx="1.5" fill="#818CF8"/></svg>
+      <span>OpenVCR</span>
+    </a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="https://github.com/rorshopping/openvcr" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn btn-primary btn-small" href="#waitlist">Join the waitlist</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero wrap" id="top">
+  <div class="hero-badge">Open source · MIT · pip install openvcr</div>
+  <h1>Your agents fly blind.<br><span class="grad">OpenVCR is the flight&nbsp;recorder.</span></h1>
+  <p class="hero-sub">
+    Record every LLM call your agent makes. Replay them deterministically in tests —
+    offline, byte-identical, free. Diff exactly what changed when you swap models or prompts.
+  </p>
+  <div class="hero-ctas">
+    <a class="btn btn-primary" href="#waitlist">Join the hosted beta →</a>
+    <a class="btn btn-ghost" href="https://github.com/rorshopping/openvcr" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/></svg>
+      Star on GitHub
+    </a>
+  </div>
+
+  <div class="terminal" role="img" aria-label="Terminal showing OpenVCR record, replay and diff commands">
+    <div class="terminal-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="terminal-title">zsh — 60 seconds to deterministic tests</span></div>
+<pre><code><span class="c-comment">$</span> <span class="c-cmd">pip install openvcr</span>
+<span class="c-comment">$</span> <span class="c-cmd">openvcr demo</span>                        <span class="c-dim"># works with zero API keys</span>
+<span class="c-green">  ● replaying on port 8817 — no network calls will be made</span>
+
+<span class="c-comment">$</span> <span class="c-cmd">openvcr record --upstream https://api.openai.com</span>
+<span class="c-comment">$</span> <span class="c-dim">export OPENAI_BASE_URL=http://127.0.0.1:8817/v1</span>
+<span class="c-comment">$</span> <span class="c-cmd">python my_agent.py</span>                  <span class="c-dim"># any framework, any language</span>
+<span class="c-green">  ✓ saved 14 exchange(s) → agent.cassette.jsonl</span>
+
+<span class="c-comment">$</span> <span class="c-cmd">openvcr diff baseline.cassette agent.cassette</span>
+<span class="c-red">  ✗ #2 DRIFT   POST /v1/chat/completions</span>
+      $.choices[0].message.content:
+        old: <span class="c-str">"Your order #4511 ships tomorrow."</span>
+        new: <span class="c-str">"Order #4511 will ship tomorrow."</span>
+<span class="c-dim">  Summary: 7 same, 1 drifted, 0 missing (8 total)</span></code></pre>
+  </div>
+</header>
+
+<section class="wrap section" id="why">
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-icon">◈</div>
+      <h3>Failed runs are unreproducible</h3>
+      <p>Agents are non-deterministic. When a run breaks you can't replay it — you get to
+      re-read logs and guess. Record the run once, replay it forever, byte for byte.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⎘</div>
+      <h3>Agent tests are hand-mocked lies</h3>
+      <p>Hand-written mocks don't match what the API really returns. Replay <em>actual</em>
+      recorded traffic in pytest — deterministic, offline, and $0 per run.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚠</div>
+      <h3>Model updates break things silently</h3>
+      <p>Providers update models under the same name. <code>openvcr diff</code> shows the exact
+      per-request drift — so you upgrade on evidence, not hope.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap section" id="how">
+  <h2>How it works</h2>
+  <p class="section-sub">One artifact — the <strong>cassette</strong>: a JSONL file of every
+  request/response pair, streams included, secrets scrubbed.</p>
+  <ol class="steps">
+    <li>
+      <div class="step-num">1</div>
+      <h3>Record</h3>
+      <p>OpenVCR is a local proxy. Point your app at it — OpenAI SDK, Anthropic SDK,
+      LangChain, curl, anything — and traffic passes through untouched while being teed
+      to a cassette file.</p>
+      <pre><code>openvcr record \
+  --upstream https://api.openai.com \
+  --out agent.cassette.jsonl</code></pre>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <h3>Replay</h3>
+      <p>The replay server answers from the cassette using exact request matching —
+      including SSE streams re-emitted chunk by chunk. Same bytes, every time.</p>
+      <pre><code>openvcr replay agent.cassette.jsonl
+<span class="c-dim"># tests run offline, free, fast</span></code></pre>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <h3>Diff</h3>
+      <p>Re-record after a model or prompt change. OpenVCR reassembles streams into text
+      and tool calls, ignores provider noise, and shows you the real drift.</p>
+      <pre><code>openvcr diff baseline.cassette \
+  agent.cassette <span class="c-dim"># exit 1 on drift → CI gate</span></code></pre>
+    </li>
+  </ol>
+</section>
+
+<section class="wrap section" id="features">
+  <h2>Built like infrastructure, not a demo</h2>
+  <div class="grid-4">
+    <div class="feat"><strong>Any language</strong><span>It's a proxy. If it speaks HTTP, it works — Python, TS, Go, Rust, curl.</span></div>
+    <div class="feat"><strong>Streaming native</strong><span>SSE responses recorded and re-emitted chunk-for-chunk.</span></div>
+    <div class="feat"><strong>pytest built in</strong><span><code>pip install openvcr[pytest]</code>, use the <code>openvcr</code> fixture. Env vars wired for you.</span></div>
+    <div class="feat"><strong>Secret scrubbing</strong><span>Auth headers never recorded; token-shaped strings redacted in bodies.</span></div>
+    <div class="feat"><strong>Semantic diffing</strong><span>Streams reassembled to text + tool calls; ids/timestamps/usage ignored.</span></div>
+    <div class="feat"><strong>Reviewable format</strong><span>JSONL cassettes: diffable, greppable, code-reviewable. Yours, forever.</span></div>
+    <div class="feat"><strong>Zero config</strong><span>Sane defaults everywhere. Two commands to a deterministic test suite.</span></div>
+    <div class="feat"><strong>MIT, no accounts</strong><span>The core is free forever. Local-first — nothing leaves your machine.</span></div>
+  </div>
+</section>
+
+<section class="wrap section" id="pricing">
+  <h2>Open core, forever</h2>
+  <p class="section-sub">Everything above is MIT and free — no accounts, no telemetry, no
+  upsell inside your terminal. The hosted product does what one machine can't.</p>
+  <div class="grid-3 pricing">
+    <div class="card price-card">
+      <div class="price-name">Open source</div>
+      <div class="price-amount">$0 <span>forever</span></div>
+      <ul>
+        <li>Record, replay, diff — unlimited</li>
+        <li>pytest fixtures &amp; CLI</li>
+        <li>Streaming &amp; secret scrubbing</li>
+        <li>Every future core feature</li>
+      </ul>
+      <a class="btn btn-ghost btn-block" href="https://github.com/rorshopping/openvcr" target="_blank" rel="noopener">Get it on GitHub</a>
+    </div>
+    <div class="card price-card featured">
+      <div class="price-flag">Private beta — founding members get 50% off for a year</div>
+      <div class="price-name">OpenVCR Cloud</div>
+      <div class="price-amount">$19 <span>/ month, planned</span></div>
+      <ul>
+        <li><strong>Drift canaries</strong> — re-runs your cassettes on new model releases, opens a PR with the diff</li>
+        <li>Team cassette library, access-controlled</li>
+        <li>Drift report review UI</li>
+        <li>Flakiness analytics across providers</li>
+      </ul>
+      <a class="btn btn-primary btn-block" href="#waitlist">Join the waitlist</a>
+    </div>
+    <div class="card price-card">
+      <div class="price-name">Team &amp; Enterprise</div>
+      <div class="price-amount">Let's talk</div>
+      <ul>
+        <li>Self-hosted Cloud, SSO / SCIM</li>
+        <li>Audit logs, on-prem cassette vaults</li>
+        <li>Support SLAs &amp; priority roadmap</li>
+      </ul>
+      <a class="btn btn-ghost btn-block" href="#waitlist">Register interest</a>
+    </div>
+  </div>
+  <p class="pricing-note">Local-first by design: cassettes stay on your machine unless <em>you</em> upload them. We sell automation and collaboration — never access to your agent's brain.</p>
+</section>
+
+<section class="wrap section" id="waitlist">
+  <div class="waitlist-panel">
+    <div class="waitlist-copy">
+      <h2>Be first in line for OpenVCR Cloud</h2>
+      <p>Drift canaries on every model release. A team library for your cassettes.
+      Founding-member pricing for everyone on this list.</p>
+      <p class="waitlist-meta"><span id="waitlist-count" class="count" hidden></span></p>
+      <p class="privacy-line">We store your email and nothing else. No spam, one launch email.</p>
+    </div>
+    <form id="waitlist-form" class="waitlist-form" novalidate>
+      <label for="wl-email">Work or personal email</label>
+      <input id="wl-email" name="email" type="email" required autocomplete="email"
+             placeholder="you@company.com" maxlength="254">
+      <label for="wl-role">What describes you best?</label>
+      <select id="wl-role" name="role">
+        <option value="builder">AI engineer / builder</option>
+        <option value="platform">Platform / DevEx / QA</option>
+        <option value="enterprise">Enterprise / regulated team</option>
+        <option value="other">Something else</option>
+      </select>
+      <label for="wl-building">What are you building? <span class="opt">(optional)</span></label>
+      <textarea id="wl-building" name="building" rows="2" maxlength="500"
+                placeholder="e.g. a coding agent for legacy COBOL migration…"></textarea>
+      <input type="text" name="website" id="wl-website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit" class="btn btn-primary btn-block" id="wl-submit">Join the waitlist</button>
+      <p class="form-status" id="wl-status" role="status" aria-live="polite"></p>
+    </form>
+    <div id="wl-success" class="waitlist-success" hidden>
+      <div class="success-check">✓</div>
+      <h3>You're on the list<span id="wl-position"></span>.</h3>
+      <p>We'll email you when the hosted beta opens. Until then, the open-source core
+      already does record → replay → diff:</p>
+      <pre><code>pip install openvcr &amp;&amp; openvcr demo</code></pre>
+      <a class="btn btn-ghost" href="https://github.com/rorshopping/openvcr" target="_blank" rel="noopener">Star the repo while you wait ★</a>
+    </div>
+  </div>
+</section>
+
+<section class="wrap section" id="faq">
+  <h2>Questions, answered</h2>
+  <details>
+    <summary>How is this different from VCR.py / respx?</summary>
+    <p>Those mock HTTP in Python only, from hand-written fixtures. OpenVCR records
+    <em>real</em> traffic through a language-agnostic proxy, replays SSE streams
+    faithfully, and diffs trajectories semantically — built for agents, where a
+    "response" is a whole tool-calling loop.</p>
+  </details>
+  <details>
+    <summary>Does it work with LangChain / LlamaIndex / the Vercel AI SDK?</summary>
+    <p>Yes — anything that lets you set a base URL. That's every mainstream LLM library,
+    in every language. No code changes, no plugins.</p>
+  </details>
+  <details>
+    <summary>Where do my prompts and completions go?</summary>
+    <p>Into a JSONL file on your disk. The core has no telemetry and makes no network
+    calls beyond the API you point it at. Cloud upload is opt-in per cassette.</p>
+  </details>
+  <details>
+    <summary>What if a test request doesn't match the cassette?</summary>
+    <p>You get a 409 with the offending request's hash, what the cassette contains, and
+    the exact command to re-record. Silent wrongness is the one thing OpenVCR refuses to do.</p>
+  </details>
+  <details>
+    <summary>When does the hosted beta open?</summary>
+    <p>We're onboarding waitlist members in order as drift canaries graduate from
+    dogfood to GA. Joining the list locks in founding-member pricing.</p>
+  </details>
+</section>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div>
+      <strong>OpenVCR</strong> — the flight recorder for AI agents.<br>
+      <span class="c-dim">MIT licensed. Built by and for agent developers.</span>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/rorshopping/openvcr" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/rorshopping/openvcr/issues" target="_blank" rel="noopener">Issues</a>
+      <a href="#waitlist">Waitlist</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>

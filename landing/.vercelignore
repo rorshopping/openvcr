@@ -1,0 +1,3 @@
+devserver.py
+.env.local
+__pycache__/

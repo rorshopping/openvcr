@@ -1,0 +1,2 @@
+# The waitlist function is stdlib-only (see api/waitlist.py BlobStore).
+# This file exists so Vercel's Python runtime picks up the api/ directory.

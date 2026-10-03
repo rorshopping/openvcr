@@ -1,5 +1,7 @@
 # OpenVCR
 
+[![CI](https://github.com/rorshopping/openvcr/actions/workflows/ci.yml/badge.svg)](https://github.com/rorshopping/openvcr/actions/workflows/ci.yml)
+
 **The flight recorder for AI agents.** Record every LLM API call your agent
 makes, replay them deterministically in tests, and diff exactly what changed
 when you swap models or prompts.
@@ -33,9 +35,12 @@ streams), with credentials scrubbed by default.
 ## Quickstart (60 seconds, no API key)
 
 ```console
-$ pip install openvcr
+$ pip install git+https://github.com/rorshopping/openvcr
 $ openvcr demo
 ```
+
+> A PyPI release is coming shortly; installing from GitHub gets you the same
+> package today.
 
 In another terminal:
 

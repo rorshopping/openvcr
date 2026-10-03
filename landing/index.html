@@ -30,7 +30,7 @@
 </nav>
 
 <header class="hero wrap" id="top">
-  <div class="hero-badge">Open source · MIT · pip install openvcr</div>
+  <div class="hero-badge">Open source · MIT · install from GitHub</div>
   <h1>Your agents fly blind.<br><span class="grad">OpenVCR is the flight&nbsp;recorder.</span></h1>
   <p class="hero-sub">
     Record every LLM call your agent makes. Replay them deterministically in tests —
@@ -46,7 +46,7 @@
 
   <div class="terminal" role="img" aria-label="Terminal showing OpenVCR record, replay and diff commands">
     <div class="terminal-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="terminal-title">zsh — 60 seconds to deterministic tests</span></div>
-<pre><code><span class="c-comment">$</span> <span class="c-cmd">pip install openvcr</span>
+<pre><code><span class="c-comment">$</span> <span class="c-cmd">pip install git+https://github.com/rorshopping/openvcr</span>
 <span class="c-comment">$</span> <span class="c-cmd">openvcr demo</span>                        <span class="c-dim"># works with zero API keys</span>
 <span class="c-green">  ● replaying on port 8817 — no network calls will be made</span>
 
@@ -209,7 +209,8 @@
       <h3>You're on the list<span id="wl-position"></span>.</h3>
       <p>We'll email you when the hosted beta opens. Until then, the open-source core
       already does record → replay → diff:</p>
-      <pre><code>pip install openvcr &amp;&amp; openvcr demo</code></pre>
+      <pre><code>pip install git+https://github.com/rorshopping/openvcr
+openvcr demo</code></pre>
       <a class="btn btn-ghost" href="https://github.com/rorshopping/openvcr" target="_blank" rel="noopener">Star the repo while you wait ★</a>
     </div>
   </div>
